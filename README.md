@@ -4,6 +4,8 @@
 <a href="https://github.com/csefikatalin/backend_kepfeltoltes.git" target="_blank">Laravel backend repo</a> <br>
 <a href="https://github.com/csefikatalin/frontend_kepfeltoltes.git" target="_blank">React frontend repo</a>
 
+<img src="public/minta.PNG">
+
 # Frontend React 18.3.1
 
 ## React telepítése bootstrap-pel és axios-szal: 
@@ -225,6 +227,45 @@ A teljes kód:
         </div>
     );
     }
+
+
+## Hibakezelés
+
+1. FileContext.js - ben az error state létrehozása
+
+    const [errors, setErrors] = useState({  });
+
+2. A POST kérés hibakezelésénél beállítjuk az errors változó értékét. 
+
+    } catch (error) {
+        console.log(error);
+        if (error.response.status === 422) {
+            setErrors(error.response.data.errors);
+        }
+    }
+
+3. Ne felejtsük el az errors változót is felsorolni a FileContext.Provider value értékei között. 
+
+
+    return (
+        <FileContext.Provider value={{ kepekLista, postAdat, errors }}>
+        {children}
+        </FileContext.Provider>
+    );
+
+4. A FormComponentbe importáljuk be az errors változót is.
+
+   const { postAdat, errors } = useFileContext();
+
+5. Minden imput elem mögé helyezzünk el egy div-et, amiben visszajelzzük a kapott hibát: 
+
+        <div>
+          {errors.title && (
+            <span className="text-danger">{errors.title[0]}</span>
+          )}
+        </div>
+
+
 
 
 
